@@ -15,7 +15,7 @@ def post_request():
     sumd = {} # 辞書型を初期化
     for row in df.iterrows():
         ymd = row[1]["年月日"]
-        weather = row[1]["天気概況(昼：06時?18時)"]
+        weather = row[1]["天気概況(昼：06時〜18時)"]
         md = re.sub(r'\d{4}\/', '', ymd) # 月/日だけにする
         # 年を閏年の2016年で仮置きする
         md = '2016/' + md
@@ -23,16 +23,16 @@ def post_request():
             sumd[md] = [0, 0, 0, 0, 0]
         # 列の値を加算する
         for i in range(1, 5):
-            sumd[md][i - 1] += row[1][i]
+            sumd[md][i] += row[1][i + 1]
         # 雨の日の場合に1を加算
         # print(sumd)
         # break
         if weather.find("雨") >= 0:
-            sumd[md][4] += 1
+            sumd[md][0] += 1
     
     # 表として出力するための処理
     df = pd.DataFrame.from_dict(sumd).T
-    df.columns = ("降水量(mm)","最高気温(℃)","最低気温(℃)","平均気温(℃)","'雨の日数(日)'")
+    df.columns = ("6〜18時に雨が降った日数(日)","1日の降水量(mm)","最高気温(℃)","最低気温(℃)","平均気温(℃)")
 
     df_r = df.reset_index()
     df_r = df_r.rename(columns = {'index':'日付'})
@@ -45,11 +45,11 @@ def post_request():
 
     for i in range(len(record)):
         record[i][0] = record[i][0].replace('2016/', '')
-        record[i][1] = round(record[i][1]/10, 1)
+        record[i][1] = round(record[i][1])
         record[i][2] = round(record[i][2]/10, 1)
         record[i][3] = round(record[i][3]/10, 1)
         record[i][4] = round(record[i][4]/10, 1)
-        record[i][5] = round(record[i][5])
+        record[i][5] = round(record[i][5]/10, 1)
 
     return jsonify({"header": header, "record": record})
 
