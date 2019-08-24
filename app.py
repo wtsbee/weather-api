@@ -44,10 +44,16 @@ def post_request():
     for i in range(len(record)):
         record[i][0] = record[i][0].replace('2016/', '')
         record[i][1] = round(record[i][1])
-        record[i][2] = round(record[i][2]/10, 1)
-        record[i][3] = round(record[i][3]/10, 1)
-        record[i][4] = round(record[i][4]/10, 1)
-        record[i][5] = round(record[i][5]/10, 1)
+        if record[i][0] == "2/29":
+            record[i][2] = round(record[i][2]/2, 1)
+            record[i][3] = round(record[i][3]/2, 1)
+            record[i][4] = round(record[i][4]/2, 1)
+            record[i][5] = round(record[i][5]/2, 1)
+        else:
+            record[i][2] = round(record[i][2]/10, 1)
+            record[i][3] = round(record[i][3]/10, 1)
+            record[i][4] = round(record[i][4]/10, 1)
+            record[i][5] = round(record[i][5]/10, 1)
 
     return jsonify({"header": header, "record": record})
 
