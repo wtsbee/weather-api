@@ -75,5 +75,4 @@ def post_request():
     return jsonify({"header": header, "record": record})
 
 if __name__ == '__main__':
-    app.debug = True
-    app.run(host = '0.0.0.0')
+    app.run(host='0.0.0.0',debug=False)
