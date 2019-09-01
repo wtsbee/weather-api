@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from flask import Flask, jsonify, request, render_template
 from datetime import datetime
 import pandas as pd
